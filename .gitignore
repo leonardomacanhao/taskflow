@@ -1,0 +1,36 @@
+# --- Backend (Java/Maven) ---
+backend/target/
+backend/*.log
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/pom.xml.asc
+
+# --- Frontend (Angular/Node) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/*.log
+frontend/.env
+
+# --- Banco de Dados Local (se usar SQLite em dev) ---
+*.db
+*.db-shm
+*.db-wal
+
+# --- IDEs ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
+
+# --- Sensíveis ---
+*.pem
+*.key
+*.env.local
