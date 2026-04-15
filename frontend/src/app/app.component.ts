@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,23 +13,18 @@ import { TranslationService } from './core/services/translation.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  private translationService = inject(TranslationService);
+export class AppComponent {
+  protected t = inject(TranslationService);
 
   ngOnInit() {
-    this.translationService.setTheme(this.translationService.currentTheme());
-  }
-
-  get translations() {
-    return this.translationService.translations();
+    this.t.setTheme(this.t.currentTheme());
   }
 
   toggleTheme() {
-    const next = this.translationService.currentTheme() === 'light' ? 'dark' : 'light';
-    this.translationService.setTheme(next);
+    this.t.setTheme(this.t.currentTheme() === 'light' ? 'dark' : 'light');
   }
 
-  setLanguage(lang: 'pt' | 'en') {
-    this.translationService.setLanguage(lang);
+  setLang(lang: 'pt' | 'en') {
+    this.t.setLanguage(lang);
   }
 }
