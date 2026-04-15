@@ -1,6 +1,7 @@
 package com.joao.taskflow.taskflowbackend.service;
 
 import com.joao.taskflow.taskflowbackend.model.dto.request.CreateCardRequest;
+import com.joao.taskflow.taskflowbackend.model.dto.request.ReorderCardsRequest;
 import com.joao.taskflow.taskflowbackend.model.dto.request.UpdateCardRequest;
 import com.joao.taskflow.taskflowbackend.model.dto.response.CardResponse;
 import com.joao.taskflow.taskflowbackend.model.mapper.CardMapper;
@@ -10,6 +11,8 @@ import com.joao.taskflow.taskflowbackend.repository.CardRepository;
 import com.joao.taskflow.taskflowbackend.repository.TaskListRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -41,10 +44,33 @@ public class CardService {
         return CardMapper.toResponse(cardRepository.save(card));
     }
 
+    public CardResponse move(Long cardId, Long newListId, Integer newPosition) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new EntityNotFoundException("Card not found"));
+        TaskList newList = taskListRepository.findById(newListId)
+                .orElseThrow(() -> new EntityNotFoundException("List not found"));
+
+        card.setTaskList(newList);
+        card.setPosition(newPosition);
+        return CardMapper.toResponse(cardRepository.save(card));
+    }
+
     public void delete(Long id) {
         if (!cardRepository.existsById(id)) {
             throw new EntityNotFoundException("Card not found");
         }
         cardRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<CardResponse> reorder(Long taskListId, List<ReorderCardsRequest.CardPositionUpdate> updates) {
+        List<Card> cards = cardRepository.findByTaskListIdOrderByPositionAsc(taskListId);
+        for (var update : updates) {
+            cards.stream()
+                    .filter(c -> c.getId().equals(update.cardId()))
+                    .findFirst()
+                    .ifPresent(c -> c.setPosition(update.newPosition()));
+        }
+        return CardMapper.toResponseList(cardRepository.saveAll(cards));
     }
 }

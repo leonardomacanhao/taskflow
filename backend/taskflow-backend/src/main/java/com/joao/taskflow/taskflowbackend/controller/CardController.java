@@ -1,6 +1,8 @@
 package com.joao.taskflow.taskflowbackend.controller;
 
 import com.joao.taskflow.taskflowbackend.model.dto.request.CreateCardRequest;
+import com.joao.taskflow.taskflowbackend.model.dto.request.MoveCardRequest;
+import com.joao.taskflow.taskflowbackend.model.dto.request.ReorderCardsRequest;
 import com.joao.taskflow.taskflowbackend.model.dto.request.UpdateCardRequest;
 import com.joao.taskflow.taskflowbackend.model.dto.response.CardResponse;
 import com.joao.taskflow.taskflowbackend.service.CardService;
@@ -38,5 +40,19 @@ public class CardController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         cardService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/move")
+    public ResponseEntity<CardResponse> move(
+            @PathVariable Long id,
+            @RequestBody @Valid MoveCardRequest request) {
+        return ResponseEntity.ok(cardService.move(id, request.newListId(), request.newPosition()));
+    }
+
+    @PatchMapping("/lists/{taskListId}/reorder")
+    public ResponseEntity<List<CardResponse>> reorder(
+            @PathVariable Long taskListId,
+            @RequestBody @Valid ReorderCardsRequest request) {
+        return ResponseEntity.ok(cardService.reorder(taskListId, request.updates()));
     }
 }

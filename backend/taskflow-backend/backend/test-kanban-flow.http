@@ -1,0 +1,124 @@
+### ============================================
+### FLUXO COMPLETO KANBAN - TESTE RÁPIDO
+### ============================================
+
+@baseUrl = http://localhost:8080
+@email = joao.teste@taskflow.local
+@password = 123456
+
+### 1. REGISTRO (apenas na primeira execução)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "João Teste",
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("userId", response.body.userId); %}
+
+### 2. LOGIN
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### 3. CRIAR BOARD
+POST {{baseUrl}}/api/boards?ownerId={{userId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Projeto Teste",
+  "description": "Board criado via teste automatizado"
+}
+
+> {% client.global.set("boardId", response.body.id); %}
+
+### 4. CRIAR LISTAS (COLUNAS)
+POST {{baseUrl}}/api/lists?boardId={{boardId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{ "name": "Backlog", "position": 0 }
+
+> {% client.global.set("list1Id", response.body.id); %}
+
+###
+POST {{baseUrl}}/api/lists?boardId={{boardId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{ "name": "Em Progresso", "position": 1 }
+
+> {% client.global.set("list2Id", response.body.id); %}
+
+###
+POST {{baseUrl}}/api/lists?boardId={{boardId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{ "name": "Concluído", "position": 2 }
+
+> {% client.global.set("list3Id", response.body.id); %}
+
+### 5. CRIAR CARDS
+POST {{baseUrl}}/api/cards?taskListId={{list1Id}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Implementar autenticação JWT",
+  "description": "Configurar Spring Security + jjwt",
+  "priority": "HIGH",
+  "dueDate": "2026-04-30T23:59:59",
+  "position": 0
+}
+
+> {% client.global.set("card1Id", response.body.id); %}
+
+###
+POST {{baseUrl}}/api/cards?taskListId={{list1Id}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Criar entidade User",
+  "description": "Modelar tabela de usuários",
+  "priority": "MEDIUM",
+  "position": 1
+}
+
+> {% client.global.set("card2Id", response.body.id); %}
+
+### 6. CONSULTAR BOARD COMPLETO
+GET {{baseUrl}}/api/boards?ownerId={{userId}}
+Authorization: Bearer {{authToken}}
+
+### 7. MOVER CARD (DRAG-AND-DROP SIMULADO)
+PATCH {{baseUrl}}/api/cards/{{card1Id}}/move
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "newListId": {{list2Id}},
+  "newPosition": 0
+}
+
+### 8. VERIFICAR MOVIMENTAÇÃO
+GET {{baseUrl}}/api/lists?boardId={{boardId}}
+Authorization: Bearer {{authToken}}
+
+### 9. DELETAR CARD
+DELETE {{baseUrl}}/api/cards/{{card2Id}}
+Authorization: Bearer {{authToken}}
+
+### 10. CONSULTAR FINAL
+GET {{baseUrl}}/api/boards?ownerId={{userId}}
+Authorization: Bearer {{authToken}}

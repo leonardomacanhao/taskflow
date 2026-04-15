@@ -8,10 +8,12 @@ import com.joao.taskflow.taskflowbackend.model.mapper.UserMapper;
 import com.joao.taskflow.taskflowbackend.repository.UserRepository;
 import com.joao.taskflow.taskflowbackend.security.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
@@ -29,6 +31,7 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
+    @Transactional
     public AuthResponse register(CreateUserRequest request) {
         if (userRepository.existsByEmailIgnoreCase(request.email())) {
             throw new IllegalArgumentException("Email already in use");
@@ -36,13 +39,17 @@ public class AuthService {
         User user = UserMapper.toEntity(request, passwordEncoder);
         userRepository.save(user);
         String token = tokenProvider.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getEmail());
+        return new AuthResponse(token, user.getEmail(), user.getId()); // ✅ Adicionado userId
     }
 
     public AuthResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+
+        User user = userRepository.findByEmailIgnoreCase(request.email())
+                .orElseThrow(() -> new BadCredentialsException("Usuário não encontrado"));
+
         String token = tokenProvider.generateToken(authentication.getName());
-        return new AuthResponse(token, request.email());
+        return new AuthResponse(token, user.getEmail(), user.getId()); // ✅ Adicionado userId
     }
 }
