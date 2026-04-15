@@ -1,36 +1,47 @@
-# --- Backend (Java/Maven) ---
-backend/target/
-backend/*.log
-backend/.mvn/
-backend/mvnw
-backend/mvnw.cmd
-backend/pom.xml.asc
+# ==========================================
+# Sistema Operacional
+# ==========================================
+.DS_Store
+Thumbs.db
 
-# --- Frontend (Angular/Node) ---
-frontend/node_modules/
-frontend/dist/
-frontend/.angular/
-frontend/*.log
-frontend/.env
-
-# --- Banco de Dados Local (se usar SQLite em dev) ---
-*.db
-*.db-shm
-*.db-wal
-
-# --- IDEs ---
+# ==========================================
+# IDEs (IntelliJ, VS Code, Eclipse)
+# ==========================================
 .idea/
 *.iml
 *.ipr
 *.iws
 .vscode/
-*.swp
+.settings/
+.classpath
+.project
 
-# --- Sistema Operacional ---
-.DS_Store
-Thumbs.db
+# ==========================================
+# Backend (Java / Maven / Spring Boot)
+# ==========================================
+backend/target/
+backend/mvnw
+backend/mvnw.cmd
+backend/.mvn/
 
-# --- Sensíveis ---
+# ==========================================
+# Frontend (Angular / Node.js)
+# ==========================================
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+frontend/.env
+frontend/.env.*
+
+# ==========================================
+# Logs e Sensíveis
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Chaves e credenciais
 *.pem
 *.key
-*.env.local

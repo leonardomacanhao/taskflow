@@ -1,0 +1,28 @@
+<header class="app-header">
+  <div class="header-left">
+    <h1 class="logo">TaskFlow</h1>
+  </div>
+  <div class="header-right">
+    <button mat-icon-button [matMenuTriggerFor]="langMenu" aria-label="Language">
+      <mat-icon>translate</mat-icon>
+    </button>
+    <mat-menu #langMenu="matMenu">
+      <button mat-menu-item (click)="setLanguage('pt')">
+        <mat-icon>language</mat-icon>
+        <span>{{ translations.lang_pt }}</span>
+      </button>
+      <button mat-menu-item (click)="setLanguage('en')">
+        <mat-icon>language</mat-icon>
+        <span>{{ translations.lang_en }}</span>
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button (click)="toggleTheme()" aria-label="Toggle theme">
+      <mat-icon>{{ translationService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+    </button>
+  </div>
+</header>
+
+<main class="app-container">
+  <router-outlet></router-outlet>
+</main>
