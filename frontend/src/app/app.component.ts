@@ -17,7 +17,8 @@ export class AppComponent {
   protected t = inject(TranslationService);
 
   toggleTheme() {
-    this.t.setTheme(this.t.currentTheme() === 'light' ? 'dark' : 'light');
+    const next = this.t.currentTheme() === 'light' ? 'dark' : 'light';
+    this.t.setTheme(next);
   }
 
   setLang(lang: 'pt' | 'en') {

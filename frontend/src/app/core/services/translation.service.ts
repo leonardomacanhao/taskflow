@@ -21,19 +21,28 @@ const DICTIONARY = {
 
 @Injectable({ providedIn: 'root' })
 export class TranslationService {
-  private lang = signal<Language>((localStorage.getItem('lang') as Language) || 'pt');
-  private theme = signal<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || 'light');
+  private langSignal = signal<Language>((localStorage.getItem('lang') as Language) || 'pt');
+  
+  // ✅ Sempre começa light. Só muda se localStorage tiver 'dark'
+  private themeSignal = signal<'light' | 'dark'>('light');
 
-  translations = computed(() => DICTIONARY[this.lang()]);
-  currentTheme = this.theme.asReadonly();
+  constructor() {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const initialTheme = savedTheme === 'dark' ? 'dark' : 'light';
+    this.themeSignal.set(initialTheme);
+    document.documentElement.setAttribute('data-theme', initialTheme);
+  }
+
+  translations = computed(() => DICTIONARY[this.langSignal()]);
+  currentTheme = this.themeSignal.asReadonly();
 
   setLanguage(lang: Language) {
-    this.lang.set(lang);
+    this.langSignal.set(lang);
     localStorage.setItem('lang', lang);
   }
 
   setTheme(theme: 'light' | 'dark') {
-    this.theme.set(theme);
+    this.themeSignal.set(theme);
     localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
   }

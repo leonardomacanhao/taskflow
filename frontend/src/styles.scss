@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 :root {
   --bg-app: #f3f4f6;
   --bg-sidebar: #111827;
@@ -7,7 +5,6 @@
   --text-primary: #111827;
   --text-secondary: #6b7280;
   --text-sidebar: #9ca3af;
-  --text-sidebar-active: #ffffff;
   --border-color: #e5e7eb;
   --accent-color: #6366f1;
   --accent-hover: #4f46e5;
@@ -17,16 +14,17 @@
   --input-bg: #f9fafb;
 }
 
+/* ✅ Garante tema escuro apenas quando ativado */
 [data-theme='dark'] {
   --bg-app: #0f172a;
   --bg-sidebar: #020617;
   --bg-card: #1e293b;
-  --text-primary: #f8fafc; /* Mais claro */
+  --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --border-color: #334155;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
-  --input-bg: #0f172a; /* Fundo do input mais escuro */
+  --input-bg: #0f172a;
 }
 
 * { box-sizing: border-box; }
@@ -40,19 +38,18 @@ html, body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* FORÇAR TEMA ESCURO EM COMPONENTES MATERIAL */
-[data-theme='dark'] .mdc-text-field--outlined .mdc-notched-outline__leading,
-[data-theme='dark'] .mdc-text-field--outlined .mdc-notched-outline__notch,
-[data-theme='dark'] .mdc-text-field--outlined .mdc-notched-outline__trailing {
-  border-color: var(--border-color) !important;
-}
-
-[data-theme='dark'] .mdc-text-field--outlined .mdc-floating-label {
-  color: var(--text-secondary) !important;
-}
-
-[data-theme='dark'] input, [data-theme='dark'] textarea {
-  color: var(--text-primary) !important;
+/* ✅ Força ícones a renderizarem corretamente */
+.mat-icon {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  word-wrap: normal !important;
+  direction: ltr !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
 ::-webkit-scrollbar { width: 8px; }
