@@ -1,0 +1,26 @@
+<div class="dashboard-grid">
+  <h2 class="section-title">{{ t.translations().dashboard }}</h2>
+  
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    @for (stat of stats; track stat.label) {
+      <div class="stat-card">
+        <div class="stat-icon" [style.background-color]="stat.color + '20'">
+          <div class="dot" [style.background-color]="stat.color"></div>
+        </div>
+        <div class="stat-info">
+          <span class="value">{{ stat.value }}</span>
+          <span class="label">{{ stat.label }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Placeholder for Recent Activity -->
+  <div class="card large">
+    <h3>Atividade Recente</h3>
+    <p style="color: var(--text-secondary); margin-top: 10px;">
+      A visualização do Kanban será implementada no próximo passo mantendo este padrão visual.
+    </p>
+  </div>
+</div>

@@ -1,18 +1,53 @@
-<header class="app-header">
-  <h1 class="logo">TaskFlow</h1>
-  <div class="header-actions">
-    <button mat-icon-button [matMenuTriggerFor]="langMenu">
-      <mat-icon>translate</mat-icon>
-    </button>
-    <mat-menu #langMenu="matMenu">
-      <button mat-menu-item (click)="setLang('pt')">{{ t.translations().lang_pt }}</button>
-      <button mat-menu-item (click)="setLang('en')">{{ t.translations().lang_en }}</button>
-    </mat-menu>
-    <button mat-icon-button (click)="toggleTheme()">
-      <mat-icon>{{ t.currentTheme() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
-    </button>
-  </div>
-</header>
-<main class="app-container">
-  <router-outlet></router-outlet>
-</main>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo-area">
+      <div class="logo-icon">TF</div>
+      <span class="logo-text">TaskFlow</span>
+    </div>
+
+    <nav class="nav-menu">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/boards" routerLinkActive="active" class="nav-item">
+        <mat-icon>view_kanban</mat-icon>
+        <span>Quadros</span>
+      </a>
+      <a routerLink="/settings" routerLinkActive="active" class="nav-item">
+        <mat-icon>settings</mat-icon>
+        <span>Configurações</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-area">
+    <header class="top-bar">
+      <h2 class="page-title">Bem-vindo de volta</h2>
+      <div class="top-actions">
+        <!-- Language Switcher -->
+        <button mat-icon-button [matMenuTriggerFor]="langMenu">
+          <mat-icon>translate</mat-icon>
+        </button>
+        <mat-menu #langMenu="matMenu">
+          <button mat-menu-item (click)="setLang('pt')">PT</button>
+          <button mat-menu-item (click)="setLang('en')">EN</button>
+        </mat-menu>
+
+        <!-- Theme Toggle -->
+        <button mat-icon-button (click)="toggleTheme()">
+          <mat-icon>{{ t.currentTheme() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+        </button>
+
+        <!-- User Avatar Placeholder -->
+        <div class="avatar">JM</div>
+      </div>
+    </header>
+
+    <div class="content-scroll">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
